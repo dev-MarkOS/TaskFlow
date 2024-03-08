@@ -24,15 +24,15 @@ function App () {
     localStorage.setItem ('todolist', JSON.stringify (updatedTodoArr));
   };
 
-  const handleDeleteTodo = index => {
+  const handleDeleteTodo = home => {
     let reducedTodo = [...allTodos];
-    reducedTodo.splice (index);
+    reducedTodo.splice (home);
 
     localStorage.setItem ('todolist', JSON.stringify (reducedTodo));
     setTodos (reducedTodo);
   };
 
-  const handleComplete = index => {
+  const handleComplete = home => {
     let now = new Date ();
     let dd = now.getDate ();
     let mm = now.getMonth () + 1;
@@ -41,26 +41,26 @@ function App () {
     let m = now.getMinutes ();
     let s = now.getSeconds ();
     let completedOn =
-      dd + '-' + mm + '-' + yyyy + ' at ' + h + ':' + m + ':' + s;
+      dd + '-' + mm + '-' + yyyy + ' às ' + h + ':' + m + ':' + s;
 
     let filteredItem = {
-      ...allTodos[index],
+      ...allTodos[home],
       completedOn: completedOn,
     };
 
     let updatedCompletedArr = [...completedTodos];
     updatedCompletedArr.push (filteredItem);
     setCompletedTodos (updatedCompletedArr);
-    handleDeleteTodo (index);
+    handleDeleteTodo (home);
     localStorage.setItem (
       'completedTodos',
       JSON.stringify (updatedCompletedArr)
     );
   };
 
-  const handleDeleteCompletedTodo = index => {
+  const handleDeleteCompletedTodo = home => {
     let reducedTodo = [...completedTodos];
-    reducedTodo.splice (index);
+    reducedTodo.splice (home);
 
     localStorage.setItem ('completedTodos', JSON.stringify (reducedTodo));
     setCompletedTodos (reducedTodo);
@@ -161,14 +161,14 @@ function App () {
         <div className="todo-list">
 
           {isCompleteScreen === false &&
-            allTodos.map ((item, index) => {
-              if(currentEdit===index){
+            allTodos.map ((item, home) => {
+              if(currentEdit===home){
                  return(
-                  <div className='edit__wrapper' key={index}>
-                  <input placeholder='Updated Title' 
+                  <div className='edit__wrapper' key={home}>
+                  <input placeholder='Insira os novos dados' 
                   onChange={(e)=>handleUpdateTitle(e.target.value)} 
                   value={currentEditedItem.title}  />
-                  <textarea placeholder='Updated Title' 
+                  <textarea placeholder='Insira os novos dados' 
                   rows={4}
                   onChange={(e)=>handleUpdateDescription(e.target.value)} 
                   value={currentEditedItem.description}  />
@@ -183,7 +183,7 @@ function App () {
                  ) 
               }else{
                 return (
-                  <div className="todo-list-item" key={index}>
+                  <div className="todo-list-item" key={home}>
                     <div>
                       <h3>{item.title}</h3>
                       <p>{item.description}</p>
@@ -192,16 +192,16 @@ function App () {
                     <div>
                       <AiOutlineDelete
                         className="icon"
-                        onClick={() => handleDeleteTodo (index)}
+                        onClick={() => handleDeleteTodo (home)}
                         title="Remover?"
                       />
                       <BsCheckLg
                         className="check-icon"
-                        onClick={() => handleComplete (index)}
+                        onClick={() => handleComplete (home)}
                         title="Finalizar?"
                       />
                       <AiOutlineEdit  className="check-icon"
-                        onClick={() => handleEdit (index,item)}
+                        onClick={() => handleEdit (home,item)}
                         title="Editar?" />
                     </div>
   
@@ -212,19 +212,19 @@ function App () {
             })}
 
           {isCompleteScreen === true &&
-            completedTodos.map ((item, index) => {
+            completedTodos.map ((item, home) => {
               return (
-                <div className="todo-list-item" key={index}>
+                <div className="todo-list-item" key={home}>
                   <div>
                     <h3>{item.title}</h3>
                     <p>{item.description}</p>
-                    <p><small>Completed on: {item.completedOn}</small></p>
+                    <p><small>Finalizada em: {item.completedOn}</small></p>
                   </div>
 
                   <div>
                     <AiOutlineDelete
                       className="icon"
-                      onClick={() => handleDeleteCompletedTodo (index)}
+                      onClick={() => handleDeleteCompletedTodo (home)}
                       title="Remover?"
                     />
                   </div>
